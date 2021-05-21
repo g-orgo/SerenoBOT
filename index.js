@@ -60,39 +60,6 @@ bot.on("message", (message) => {
 
         return message.channel.send(embed);
     }
-    /* 
-        COMMAND EXAMPLE
-
-        if(command == 'tw'){
-        // ADD A REACTION TO THE EMIT MESSAGE, DELETE IT AFTER 1s AND THEN CREATES A REPLY
-        let twitchChannel = argsAsArray.shift()
-        let sharedMessage = message.content.slice(5 + twitchChannel.length)
-        let colors = ['#f2499d', '#8ee5f5', '#64f59e', '#846ffc', '#9af5a3']
-
-        // MESSAGE
-        const embedMsg = new discordAPI.MessageEmbed()
-        .setColor(`${colors[Math.floor(Math.random()*colors.length)]}`) // CHOOSE A RANDOM COLOR
-        .setTitle('STREAM ON!! :exploding_head: :exploding_head:')
-        .setDescription(`${sharedMessage} \n ${twitchChannel}`)
-
-        message.channel.send(embedMsg)
-
-        // REACT AND DELETE AFTER 3s
-        message.react('👍')
-        message.delete({timeout: 3000})
-        .then()
-        .catch(err => {console.log(err)})
-
-        // LOG
-        console.log(`${consolePrefix} ${message.author.tag} utilizou o comando "${command}"`)
-        };
-    */
-
-    /*
-        EMBED WITH RANDOM COLOR
-        embedMsg
-        .setColor(`${colors[Math.floor(Math.random()*colors.length)]}`) // CHOOSE A RANDOM COLOR
-    */
 
     if (command == "fight") {
         fightParticipants.push({
