@@ -1,48 +1,146 @@
-const discordAPI = require('discord.js');
-const credentials = require('./credentials.json')
+const discordAPI = require("discord.js");
+const credentials = require("./credentials.json");
+/* const db = require("./db"); */
+const axios = require("axios");
 
 // BOT AND USEFUL CONST/VARIABLES
-const bot = new discordAPI.Client()
-const prefix = credentials.prefix
-const consolePrefix = credentials.consolePrefix
+const bot = new discordAPI.Client();
+const prefix = credentials.prefix;
+const consolePrefix = credentials.consolePrefix;
 
 // INIT
 bot.login(credentials.botToken)
-.then()
-.catch((err)=>{console.log(err)})
+    .then()
+    .catch((err) => {
+        console.log(err);
+    });
 
-bot.on('ready', ()=>{
-    console.log(`${consolePrefix} Beep boop!`)
-})
+bot.on("ready", () => {
+    console.log(`${consolePrefix} Beep boop!`);
+});
 
+/* axios.get("http://127.0.0.1:8000/api/fighters/").then((res) =>{
+}) */
 // MESSAGE ENG
-bot.on('message', message => {
+
+var fightParticipants = [];
+bot.on("message", (message) => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-    const args = message.content.slice(prefix.length).trim().split(' ');
-    const command = args.shift().toLowerCase();
+    const EntireMessage = message.content;
+    const argsAsArray = message.content.slice(prefix.length).trim().split(" ");
+    const command = argsAsArray.shift().toLowerCase();
+    let colors = ["#f2499d", "#8ee5f5", "#64f59e", "#846ffc", "#9af5a3"];
+    function embedMsg(
+        title,
+        frstFighterName,
+        frstFighterTeam,
+        scndFighterName,
+        scndFighterTeam
+    ) {
+        let embed = new discordAPI.MessageEmbed();
 
-    if(command == 'tw'){
+        embed
+            .setColor(
+                `${colors[Math.floor(Math.random() * colors.length)]}` // CHOOSE A RANDOM COLOR
+            )
+            .setTitle(title)
+            .addFields(
+                {
+                    name: frstFighterName,
+                    value: frstFighterTeam,
+                    inline: true,
+                },
+                {
+                    name: scndFighterName,
+                    value: scndFighterTeam,
+                    inline: true,
+                }
+            );
+
+        return message.channel.send(embed);
+    }
+    /* 
+        COMMAND EXAMPLE
+
+        if(command == 'tw'){
         // ADD A REACTION TO THE EMIT MESSAGE, DELETE IT AFTER 1s AND THEN CREATES A REPLY
-        let twitchChannel = args.shift()
-        let shareMessage = message.content.slice(5 + twitchChannel.length)
+        let twitchChannel = argsAsArray.shift()
+        let sharedMessage = message.content.slice(5 + twitchChannel.length)
         let colors = ['#f2499d', '#8ee5f5', '#64f59e', '#846ffc', '#9af5a3']
 
         // MESSAGE
         const embedMsg = new discordAPI.MessageEmbed()
         .setColor(`${colors[Math.floor(Math.random()*colors.length)]}`) // CHOOSE A RANDOM COLOR
-        .setTitle('STREAM ON!! :exploding_head: :exploding_head: ')
-        .setDescription(`${shareMessage} \n ${twitchChannel}`)
+        .setTitle('STREAM ON!! :exploding_head: :exploding_head:')
+        .setDescription(`${sharedMessage} \n ${twitchChannel}`)
 
         message.channel.send(embedMsg)
 
-        // REACT AND DELETE AFTER 5s
+        // REACT AND DELETE AFTER 3s
         message.react('👍')
-        message.delete({timeout: 1000})
+        message.delete({timeout: 3000})
         .then()
         .catch(err => {console.log(err)})
 
         // LOG
         console.log(`${consolePrefix} ${message.author.tag} utilizou o comando "${command}"`)
-    };
-})
+        };
+    */
+
+    /*
+        EMBED WITH RANDOM COLOR
+        embedMsg
+        .setColor(`${colors[Math.floor(Math.random()*colors.length)]}`) // CHOOSE A RANDOM COLOR
+    */
+
+    if (command == "fight") {
+        fightParticipants.push({
+            id: `${message.author.id}`,
+            username: `${message.author.username}`,
+            fighter1: `${argsAsArray[0]}`,
+            fighter2: `${argsAsArray[1]}`,
+            fighter3: `${argsAsArray[2]}`,
+            fighter4: `${argsAsArray[3]}`,
+            fighter5: `${argsAsArray[4]}`,
+            fighter6: `${argsAsArray[5]}`,
+        });
+        // REACT AND DELETE AFTER 3s
+        message.react("👍");
+        message
+            .delete({ timeout: 5000 })
+            .then()
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+    if (command == "emb") {
+        embedMsg("A luta vai começar", "a", "a");
+    }
+    if (fightParticipants.length == 2) {
+        let frstParticipant = fightParticipants.shift();
+        let scndParticipant = fightParticipants.shift();
+
+        let frstParticipantName = frstParticipant.username;
+        let scndParticipantName = scndParticipant.username;
+        function participantTeamArray(participant) {
+            let fightersArray = [];
+            fightersArray.push(participant.fighter1);
+            fightersArray.push(participant.fighter2);
+            fightersArray.push(participant.fighter3);
+            fightersArray.push(participant.fighter4);
+            fightersArray.push(participant.fighter5);
+            fightersArray.push(participant.fighter6);
+
+            return fightersArray;
+        }
+
+        embedMsg(
+            "A luta vai começar...",
+            frstParticipantName,
+            participantTeamArray(frstParticipant),
+            scndParticipantName,
+            participantTeamArray(scndParticipant)
+        );
+    }
+});

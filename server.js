@@ -1,7 +1,7 @@
-const express = require('express')
+const express = require("express");
 
-const app = express()
+const app = express();
 
-app.get('/callback', (req, res)=>{
-    res.send('worked').status(200)
-})
+app.get("/callback", (req, res) => {
+    res.send("worked").status(200);
+});
