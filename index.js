@@ -1,6 +1,5 @@
 const discordAPI = require("discord.js");
 const credentials = require("./credentials.json");
-/* const db = require("./db"); */
 const axios = require("axios");
 
 // BOT AND USEFUL CONST/VARIABLES
@@ -21,6 +20,7 @@ bot.on("ready", () => {
 
 /* axios.get("http://127.0.0.1:8000/api/fighters/").then((res) =>{
 }) */
+
 // MESSAGE ENG
 
 var fightParticipants = [];
@@ -109,5 +109,6 @@ bot.on("message", (message) => {
             scndParticipantName,
             participantTeamArray(scndParticipant)
         );
+        console.log(`${consolePrefix} ${frstParticipant} chamou ${scndParticipant} pra briga!`);
     }
 });
