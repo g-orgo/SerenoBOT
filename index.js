@@ -1,11 +1,12 @@
+const datefns = require("date-fns");
 const discordAPI = require("discord.js");
 const credentials = require("./credentials.json");
 const axios = require("axios");
-const utils = require("utils");
 
 // BOT AND USEFUL CONST/VARIABLES
 const bot = new discordAPI.Client();
 const prefix = credentials.prefix;
+/* const consolePrefix = `${credentials.consolePrefix} | ${setInterval(consoleTimer, 1000)}]: `; */
 const consolePrefix = credentials.consolePrefix;
 const randomInRange = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -21,7 +22,13 @@ bot.login(credentials.botToken)
     });
 
 bot.on("ready", () => {
-    console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n${consolePrefix} Beep boop!`);
+    fightParticipants = [];
+    console.log(
+        `\n\n\n\n\n\n\n\n\n\n\n\n\n\n${consolePrefix} | ${datefns.format(
+            new Date(),
+            "dd/MM/yyyy HH:mm:ss"
+        )}]: Beep boop!`
+    );
 });
 
 // MESSAGE ENG
@@ -67,6 +74,7 @@ bot.on("message", (message) => {
             let data = res.data;
             let fighterNames = [];
             let fighterTokens = [];
+
             for (index in data) {
                 fighterNames.push(
                     data[index].fighter_name.charAt(0).toUpperCase() +
@@ -74,6 +82,8 @@ bot.on("message", (message) => {
                 );
                 fighterTokens.push(data[index].fighter_token);
             }
+            message.react("📜");
+
             embedMsg(
                 "Escolha um lutador:",
                 "Lutadores",
@@ -82,12 +92,16 @@ bot.on("message", (message) => {
                 fighterTokens
             );
             console.log(
-                `${consolePrefix} ${message.author.username} consultou a lista de lutadores disponíveis!`
+                `${consolePrefix} | ${datefns.format(
+                    new Date(),
+                    "dd/MM/yyyy HH:mm:ss"
+                )}]: ${message.author.username}#${
+                    message.author.discriminator
+                } consultou a lista de lutadores disponíveis!`
             );
         });
-        message.react("📜");
         message
-            .delete({ timeout: 5000 })
+            .delete({ timeout: 2000 })
             .then()
             .catch((err) => {
                 console.log(err);
@@ -95,13 +109,14 @@ bot.on("message", (message) => {
     }
 
     if (command == "debug") {
-        message.delete({ timeout: 5000 }).then();
+        message.channel.send(message.author.discriminator);
+        message.delete({ timeout: 1000 }).then();
     }
 
     if (command == "fight") {
         fightParticipants.push({
             id: `${message.author.id}`,
-            username: `${message.author.username}`,
+            username: `${message.author.username}#${message.author.discriminator}`,
             fighter1: `${argsAsArray[0]}`,
             fighter2: `${argsAsArray[1]}`,
             fighter3: `${argsAsArray[2]}`,
@@ -159,7 +174,10 @@ bot.on("message", (message) => {
         }
 
         console.log(
-            `${consolePrefix} ${frstParticipantName} chamou ${scndParticipantName} pra briga!`
+            `${consolePrefix} | ${datefns.format(
+                new Date(),
+                "dd/MM/yyyy HH:mm:ss"
+            )}]: ${frstParticipantName} chamou ${scndParticipantName} pra briga!`
         );
 
         embedMsg(
@@ -240,10 +258,10 @@ bot.on("message", (message) => {
                     scndRoundMsgs: ["E rola o segundo round!"],
                 };
 
-                let = round;
+                /* let = round; */
             }
 
-            // FIRST ROUND
+            /* // FIRST ROUND
             setTimeout(() => {
                 let roundOneFighterOne = frstTeamWithStts[0];
                 let roundOneFighterTwo = scndTeamWithStts[0];
@@ -290,7 +308,10 @@ bot.on("message", (message) => {
                         "Lutadores",
                         roundOnenames,
                         "Vencedor",
-                        utils.capitalizer(roundOneFighterTwo.fighter_name)
+                        roundOneFighterTwo.fighter_name
+                            .charAt(0)
+                            .toUpperCase() +
+                            roundOneFighterTwo.fighter_name.slice(1)
                     );
 
                     roundOneWinner.push(
@@ -370,7 +391,7 @@ bot.on("message", (message) => {
                 console.log(
                     `${consolePrefix} ${roundTwoWinner.shift()} ganhou o round dois`
                 );
-            }, 4000);
+            }, 4000); */
         }, 1000);
     }
 });
