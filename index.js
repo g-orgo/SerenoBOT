@@ -109,7 +109,6 @@ bot.on("message", (message) => {
     }
 
     if (command == "debug") {
-        message.channel.send(message.author.discriminator);
         message.delete({ timeout: 1000 }).then();
     }
 
@@ -256,11 +255,39 @@ bot.on("message", (message) => {
                 roundMessages = {
                     frstRoundMsgs: ["Começa o primeiro round!"],
                     scndRoundMsgs: ["E rola o segundo round!"],
+                    thrdRoundMsgs: ["Vamos de terceiro round!"],
+                    frthRoundMsgs: ["Mas que quarto round esplendido!"],
+                    ftthRoundMsgs: ["Estamos perto de uma vitória incrível!"],
+                    ftthRoundMsgs: ["Round decisivo!"],
                 };
 
-                /* let = round; */
+                let roundFightersArray = [];
+                for (index in frstTeamWithStts) {
+                    // I've tried while loop but it seems not to work inside life-cycled functions like this message()
+                    let roundFighter = {
+                        names: [
+                            frstTeamWithStts[index].fighter_name
+                                .charAt(0)
+                                .toUpperCase() +
+                                frstTeamWithStts[index].fighter_name.slice(1),
+                            scndTeamWithStts[index].fighter_name
+                                .charAt(0)
+                                .toUpperCase() +
+                                scndTeamWithStts[index].fighter_name.slice(1),
+                        ],
+                        stts: [
+                            frstTeamWithStts[index].fighter_stts,
+                            scndTeamWithStts[index].fighter_stts,
+                        ],
+                    };
+                    roundFightersArray.push(roundFighter);
+                }
+
+                console.log(roundFightersArray);
+                return;
             }
 
+            letItRip();
             /* // FIRST ROUND
             setTimeout(() => {
                 let roundOneFighterOne = frstTeamWithStts[0];
