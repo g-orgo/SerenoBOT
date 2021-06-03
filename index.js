@@ -1,3 +1,4 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// MASTERMIND AREA
 const datefns = require("date-fns");
 const discordAPI = require("discord.js");
 const credentials = require("./credentials.json");
@@ -30,18 +31,19 @@ bot.on("ready", () => {
         )}]: Beep boop!`
     );
 });
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// MASTERMIND AREA
 
 // MESSAGE ENG
-
 bot.on("message", (message) => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
     const EntireMessage = message.content;
     const argsAsArray = message.content.slice(prefix.length).trim().split(" ");
     const command = argsAsArray.shift().toLowerCase();
     let colors = ["#f2499d", "#8ee5f5", "#64f59e", "#846ffc", "#9af5a3"];
     let emotes = ["👍", "✌️", "✅", "🔥", "✨", "👌"];
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// RED AREA
     function embedMsg(
         title,
         frstFieldName,
@@ -68,8 +70,9 @@ bot.on("message", (message) => {
             );
         return message.channel.send(embed);
     }
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// RED AREA
     if (command == "list") {
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
         axios.get("http://127.0.0.1:8000/api/fighters/").then((res) => {
             let data = res.data;
             let fighterNames = [];
@@ -83,7 +86,7 @@ bot.on("message", (message) => {
                 fighterTokens.push(data[index].fighter_token);
             }
             message.react("📜");
-
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
             embedMsg(
                 "Escolha um lutador:",
                 "Lutadores",
@@ -111,7 +114,7 @@ bot.on("message", (message) => {
     if (command == "debug") {
         message.delete({ timeout: 1000 }).then();
     }
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
     if (command == "fight") {
         fightParticipants.push({
             id: `${message.author.id}`,
@@ -123,6 +126,7 @@ bot.on("message", (message) => {
             fighter5: `${argsAsArray[4]}`,
             fighter6: `${argsAsArray[5]}`,
         });
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
         // REACT AND DELETE AFTER 5s
         message.react(`${emotes[Math.floor(Math.random() * emotes.length)]}`);
         message
@@ -141,7 +145,7 @@ bot.on("message", (message) => {
         let scndParticipantName = scndParticipant.username;
 
         let fhgterObjArray = [];
-
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
         function participantTeamArray(participant) {
             let frstFighter = participant.fighter1;
             let scndFighter = participant.fighter2;
@@ -171,7 +175,7 @@ bot.on("message", (message) => {
             });
             return fightersArray;
         }
-
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
         console.log(
             `${consolePrefix} | ${datefns.format(
                 new Date(),
@@ -186,7 +190,7 @@ bot.on("message", (message) => {
             scndParticipantName,
             participantTeamArray(scndParticipant)
         );
-
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
         function fightSttsEngine(frstfighterArray, scndfighterArray) {
             for (index in frstfighterArray) {
                 let ataq =
@@ -232,9 +236,10 @@ bot.on("message", (message) => {
                     };
                 }
             }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// RED AREA
             let frstparticipantTeam = fhgterObjArray.splice(0, 6);
             let scndparticipantTeam = fhgterObjArray.splice(0, 6);
-            fightSttsEngine(frstparticipantTeam, scndparticipantTeam);
 
             let frstTeamWithStts = fightSttsEngine(
                 frstparticipantTeam,
@@ -252,18 +257,23 @@ bot.on("message", (message) => {
             }
 
             function letItRip() {
-                roundMessages = {
+                let roundMessages = {
                     frstRoundMsgs: ["Começa o primeiro round!"],
                     scndRoundMsgs: ["E rola o segundo round!"],
                     thrdRoundMsgs: ["Vamos de terceiro round!"],
                     frthRoundMsgs: ["Mas que quarto round esplendido!"],
                     ftthRoundMsgs: ["Estamos perto de uma vitória incrível!"],
-                    ftthRoundMsgs: ["Round decisivo!"],
+                    sixtRoundMsgs: ["Round decisivo!"],
                 };
+                let roundTimeouts = [5000, 10000, 15000, 20000, 25000, 30000]; // TIME BETWEEN ROUNDS SET TO 5s
 
                 let roundFightersArray = [];
+                //FIGHTERS PER ROUND SEPARATOR
                 for (index in frstTeamWithStts) {
-                    // I've tried while loop but it seems not to work inside life-cycled functions like this message()
+                    /* 
+                        I've tried while loop but it seems not to work inside life-cycled functions like this message()
+                        So i'm using an 6length array instead.
+                    */
                     let roundFighter = {
                         names: [
                             frstTeamWithStts[index].fighter_name
@@ -283,7 +293,12 @@ bot.on("message", (message) => {
                     roundFightersArray.push(roundFighter);
                 }
 
-                console.log(roundFightersArray);
+                for (index in roundFightersArray) {
+                    setTimeout(() => {
+                        //ROUNDS
+                        console.log(roundFightersArray);
+                    }, roundTimeouts[index]);
+                }
                 return;
             }
 
@@ -419,6 +434,7 @@ bot.on("message", (message) => {
                     `${consolePrefix} ${roundTwoWinner.shift()} ganhou o round dois`
                 );
             }, 4000); */
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// RED AREA
         }, 1000);
     }
 });
