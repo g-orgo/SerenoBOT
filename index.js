@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// MASTERMIND AREA
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// INITIAL AREA
 const datefns = require("date-fns");
 const discordAPI = require("discord.js");
 const credentials = require("./credentials.json");
@@ -25,13 +25,13 @@ bot.login(credentials.botToken)
 bot.on("ready", () => {
     fightParticipants = [];
     console.log(
-        `\n\n\n\n\n\n\n\n\n\n\n\n\n\n${consolePrefix} | ${datefns.format(
+        `\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n${consolePrefix} | ${datefns.format(
             new Date(),
             "dd/MM/yyyy HH:mm:ss"
         )}]: Beep boop!`
     );
 });
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// MASTERMIND AREA
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////// INITIAL AREA
 
 // MESSAGE ENG
 bot.on("message", (message) => {
@@ -190,7 +190,7 @@ bot.on("message", (message) => {
             scndParticipantName,
             participantTeamArray(scndParticipant)
         );
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
+
         function fightSttsEngine(frstfighterArray, scndfighterArray) {
             for (index in frstfighterArray) {
                 let ataq =
@@ -265,10 +265,11 @@ bot.on("message", (message) => {
                     ftthRoundMsgs: ["Estamos perto de uma vitória incrível!"],
                     sixtRoundMsgs: ["Round decisivo!"],
                 };
-                let roundTimeouts = [5000, 10000, 15000, 20000, 25000, 30000]; // TIME BETWEEN ROUNDS SET TO 5s
+                let roundTimeouts = [2000, 4000, 6000, 8000, 10000, 12000]; // TIME BETWEEN ROUNDS SET TO 2s
 
                 let roundFightersArray = [];
-                //FIGHTERS PER ROUND SEPARATOR
+
+                // FIGHTERS PER ROUND SEPARATOR
                 for (index in frstTeamWithStts) {
                     /* 
                         I've tried while loop but it seems not to work inside life-cycled functions like this message()
@@ -293,12 +294,27 @@ bot.on("message", (message) => {
                     roundFightersArray.push(roundFighter);
                 }
 
+                // ROUND SYS
+                let teamOneNames = [];
+                let teamTwoNames = [];
+                let teamOneStts = [];
+                let teamTwoStts = [];
                 for (index in roundFightersArray) {
+                    let count = index; // Idk why but it seems not to work if i didn't declare a count for it, may be some setTimeout() issue
+
+                    teamOneNames.push(roundFightersArray[count].names.shift());
+                    teamTwoNames.push(roundFightersArray[count].names.shift());
+                    teamOneStts.push(roundFightersArray[count].stts.shift());
+                    teamTwoStts.push(roundFightersArray[count].stts.shift());
+
                     setTimeout(() => {
                         //ROUNDS
-                        console.log(roundFightersArray);
-                    }, roundTimeouts[index]);
+                        console.log(
+                            `\nROUND ${parseInt(count)+1}:\n${teamOneNames[count]} | ${teamOneStts[count]}\n${teamTwoNames[count]} | ${teamTwoStts[count]}\n\n`
+                        );
+                    }, roundTimeouts[count]);
                 }
+
                 return;
             }
 
