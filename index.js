@@ -419,6 +419,14 @@ bot.on("message", (message) => {
                                 }`
                             );
                         }
+                        if (roundWinner.length == 6) {
+                            console.log(
+                                `${consolePrefix} | ${datefns.format(
+                                    new Date(),
+                                    "dd/MM/yyyy HH:mm:ss"
+                                )}]: Cabou a luta entre ${frstParticipantName} e ${scndParticipantName}`
+                            );
+                        }
                     }, roundTimeouts[count]);
                 }
                 return;
