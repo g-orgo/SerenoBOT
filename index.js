@@ -40,7 +40,19 @@ bot.on("message", (message) => {
     const EntireMessage = message.content;
     const argsAsArray = message.content.slice(prefix.length).trim().split(" ");
     const command = argsAsArray.shift().toLowerCase();
-    let colors = ["#f2499d", "#8ee5f5", "#64f59e", "#846ffc", "#9af5a3"];
+    let colors = [
+        "#f2499d",
+        "#8ee5f5",
+        "#64f59e",
+        "#846ffc",
+        "#9af5a3",
+        "#5ea872",
+        "#8b6fa8",
+        "#dfe089",
+        "#f5ad7a",
+        "#be68d9",
+        "#c26399",
+    ];
     let emotes = ["👍", "✌️", "✅", "🔥", "✨", "👌"];
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// RED AREA
@@ -51,6 +63,7 @@ bot.on("message", (message) => {
         scndFieldName,
         scndFieldTxt
     ) {
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// EMBED MESSAGE
         let embed = new discordAPI.MessageEmbed();
 
         embed
@@ -110,12 +123,9 @@ bot.on("message", (message) => {
                 console.log(err);
             });
     }
-
-    if (command == "debug") {
-        message.delete({ timeout: 1000 }).then();
-    }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
     if (command == "fight") {
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// First message !fight
         fightParticipants.push({
             id: `${message.author.id}`,
             username: `${message.author.username}#${message.author.discriminator}`,
@@ -137,6 +147,14 @@ bot.on("message", (message) => {
             });
     }
 
+    if (fightParticipants.length == 1) {
+        console.log(
+            `${consolePrefix} | ${datefns.format(
+                new Date(),
+                "dd/MM/yyyy HH:mm:ss"
+            )}]: ${fightParticipants[0].username} atiçou uma briga...`
+        );
+    }
     if (fightParticipants.length == 2) {
         let frstParticipant = fightParticipants.shift();
         let scndParticipant = fightParticipants.shift();
@@ -191,6 +209,7 @@ bot.on("message", (message) => {
             participantTeamArray(scndParticipant)
         );
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Fighter Status Engine
         function fightSttsEngine(frstfighterArray, scndfighterArray) {
             for (index in frstfighterArray) {
                 let ataq =
@@ -251,21 +270,27 @@ bot.on("message", (message) => {
             );
 
             function winRate(ataq, bloq) {
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Winrate system
                 let calculate = (ataq + bloq / 100).toFixed(2);
 
                 return calculate;
             }
 
             function letItRip() {
-                let roundMessages = {
-                    frstRoundMsgs: ["Começa o primeiro round!"],
-                    scndRoundMsgs: ["E rola o segundo round!"],
-                    thrdRoundMsgs: ["Vamos de terceiro round!"],
-                    frthRoundMsgs: ["Mas que quarto round esplendido!"],
-                    ftthRoundMsgs: ["Estamos perto de uma vitória incrível!"],
-                    sixtRoundMsgs: ["Round decisivo!"],
-                };
-                let roundTimeouts = [2000, 4000, 6000, 8000, 10000, 12000]; // TIME BETWEEN ROUNDS SET TO 2s
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Fight system / rounds
+                let roundMessages = [
+                    "Começa o round por aqui!",
+                    "E rola mais um round!",
+                    "Vamos de mais um round!",
+                    "Mas que espetaculo!",
+                    "Estamos perto de uma vitória incrível!",
+                    "Esse round vai ser decisivo!",
+                    "Começo de round na area!",
+                    "Ih, essa doeu...",
+                    "Você viu aquele golpe?",
+                    "Camarão dormiu e a onda levou!",
+                ];
+                let roundTimeouts = [2500, 4500, 6500, 8500, 10500, 12500]; // TIME BETWEEN ROUNDS SET TO 2.5s
 
                 let roundFightersArray = [];
 
@@ -299,158 +324,108 @@ bot.on("message", (message) => {
                 let teamTwoNames = [];
                 let teamOneStts = [];
                 let teamTwoStts = [];
+                let teamOneWinRate = [];
+                let teamTwoWinRate = [];
+                let roundWinner = [];
                 for (index in roundFightersArray) {
                     let count = index; // Idk why but it seems not to work if i didn't declare a count for it, may be some setTimeout() issue
-
                     teamOneNames.push(roundFightersArray[count].names.shift());
                     teamTwoNames.push(roundFightersArray[count].names.shift());
                     teamOneStts.push(roundFightersArray[count].stts.shift());
                     teamTwoStts.push(roundFightersArray[count].stts.shift());
+                    teamOneWinRate.push(
+                        winRate(
+                            teamOneStts[count].ataq,
+                            teamOneStts[count].bloq
+                        )
+                    );
+                    teamTwoWinRate.push(
+                        winRate(
+                            teamTwoStts[count].ataq,
+                            teamTwoStts[count].bloq
+                        )
+                    );
 
                     setTimeout(() => {
-                        //ROUNDS
-                        console.log(
-                            `\nROUND ${parseInt(count)+1}:\n${teamOneNames[count]} | ${teamOneStts[count]}\n${teamTwoNames[count]} | ${teamTwoStts[count]}\n\n`
-                        );
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ROUNDS
+                        if (teamOneWinRate[count] > teamTwoWinRate[count]) {
+                            roundWinner.push(teamOneNames[count]);
+                            embedMsg(
+                                roundMessages[
+                                    Math.floor(
+                                        Math.random() * roundMessages.length
+                                    )
+                                ],
+                                "Lutadores",
+                                `${teamOneNames[count]} \n ${teamTwoNames[count]}`,
+                                "Vencedor",
+                                roundWinner[count]
+                            );
+                            //
+                            console.log(
+                                `${consolePrefix} | ${datefns.format(
+                                    new Date(),
+                                    "dd/MM/yyyy HH:mm:ss"
+                                )}]: Round ${parseInt(count) + 1}: Vencedor ${
+                                    roundWinner[count]
+                                }`
+                            );
+                        }
+                        if (teamOneWinRate[count] < teamTwoWinRate[count]) {
+                            roundWinner.push(teamTwoNames[count]);
+                            console.log("Team two fighter win");
+                            embedMsg(
+                                roundMessages[
+                                    Math.floor(
+                                        Math.random() * roundMessages.length
+                                    )
+                                ],
+                                "Lutadores",
+                                `${teamOneNames[count]} \n ${teamTwoNames[count]}`,
+                                "Vencedor",
+                                roundWinner[count]
+                            );
+                            //
+                            console.log(
+                                `${consolePrefix} | ${datefns.format(
+                                    new Date(),
+                                    "dd/MM/yyyy HH:mm:ss"
+                                )}]: Round ${parseInt(count) + 1}: Vencedor ${
+                                    roundWinner[count]
+                                }`
+                            );
+                        }
+                        if (teamOneWinRate[count] == teamTwoWinRate[count]) {
+                            roundWinner.push("Both");
+                            console.log("Draw");
+                            embedMsg(
+                                roundMessages[
+                                    Math.floor(
+                                        Math.random() * roundMessages.length
+                                    )
+                                ],
+                                "Lutadores",
+                                `${teamOneNames[count]} \n ${teamTwoNames[count]}`,
+                                "Vencedor",
+                                roundWinner[count]
+                            );
+                            //
+                            console.log(
+                                `${consolePrefix} | ${datefns.format(
+                                    new Date(),
+                                    "dd/MM/yyyy HH:mm:ss"
+                                )}]: Round ${parseInt(count) + 1}: Vencedor ${
+                                    roundWinner[count]
+                                }`
+                            );
+                        }
                     }, roundTimeouts[count]);
                 }
-
                 return;
             }
 
             letItRip();
-            /* // FIRST ROUND
-            setTimeout(() => {
-                let roundOneFighterOne = frstTeamWithStts[0];
-                let roundOneFighterTwo = scndTeamWithStts[0];
-
-                let roundOnenames = [
-                    roundOneFighterOne.fighter_name.charAt(0).toUpperCase() +
-                        roundOneFighterOne.fighter_name.slice(1),
-                    roundOneFighterTwo.fighter_name.charAt(0).toUpperCase() +
-                        roundOneFighterTwo.fighter_name.slice(1),
-                ];
-
-                let roundOneFighterOneWinRate = winRate(
-                    roundOneFighterOne.fighter_stts.ataq,
-                    roundOneFighterOne.fighter_stts.bloq
-                );
-
-                let roundOneFighterTwoWinRate = winRate(
-                    roundOneFighterTwo.fighter_stts.ataq,
-                    roundOneFighterTwo.fighter_stts.bloq
-                );
-
-                let roundOneWinner = [];
-
-                if (roundOneFighterOneWinRate > roundOneFighterTwoWinRate) {
-                    let msg = embedMsg(
-                        "E rola o primeiro round!",
-                        "Lutadores",
-                        roundOnenames,
-                        "Vencedor",
-                        roundOneFighterOne.fighter_name
-                    );
-
-                    roundOneWinner.push(
-                        roundOneFighterOne.fighter_name
-                            .charAt(0)
-                            .toUpperCase() +
-                            roundOneFighterOne.fighter_name.slice(1)
-                    );
-                    return msg;
-                }
-                if (roundOneFighterOneWinRate < roundOneFighterTwoWinRate) {
-                    let msg = embedMsg(
-                        "E rola o primeiro round!",
-                        "Lutadores",
-                        roundOnenames,
-                        "Vencedor",
-                        roundOneFighterTwo.fighter_name
-                            .charAt(0)
-                            .toUpperCase() +
-                            roundOneFighterTwo.fighter_name.slice(1)
-                    );
-
-                    roundOneWinner.push(
-                        roundOneFighterTwo.fighter_name
-                            .charAt(0)
-                            .toUpperCase() +
-                            roundOneFighterTwo.fighter_name.slice(1)
-                    );
-                    return msg;
-                }
-                console.log(
-                    `${consolePrefix} ${roundOneWinner.shift()} ganhou o round um`
-                );
-            }, 3000);
-
-            // SECOND ROUND
-            setTimeout(() => {
-                let roundTwoFighterOne = frstTeamWithStts[1];
-                let roundTwoFighterTwo = scndTeamWithStts[1];
-
-                let roundTwonames = [
-                    roundTwoFighterOne.fighter_name.charAt(0).toUpperCase() +
-                        roundTwoFighterOne.fighter_name.slice(1),
-                    roundTwoFighterTwo.fighter_name.charAt(0).toUpperCase() +
-                        roundTwoFighterTwo.fighter_name.slice(1),
-                ];
-
-                let roundTwoFighterOneWinRate = winRate(
-                    roundTwoFighterOne.fighter_stts.ataq,
-                    roundTwoFighterOne.fighter_stts.bloq
-                );
-
-                let roundTwoFighterTwoWinRate = winRate(
-                    roundTwoFighterTwo.fighter_stts.ataq,
-                    roundTwoFighterTwo.fighter_stts.bloq
-                );
-
-                let roundTwoWinner = [];
-
-                if (roundTwoFighterOneWinRate > roundTwoFighterTwoWinRate) {
-                    let msg = embedMsg(
-                        "E rola o primeiro round!",
-                        "Lutadores",
-                        roundTwonames,
-                        "Vencedor",
-                        roundTwoFighterOne.fighter_name
-                    );
-
-                    roundTwoWinner.push(
-                        roundTwoFighterOne.fighter_name
-                            .charAt(0)
-                            .toUpperCase() +
-                            roundTwoFighterOne.fighter_name.slice(1)
-                    );
-                    return msg;
-                }
-                if (roundTwoFighterOneWinRate < roundTwoFighterTwoWinRate) {
-                    let msg = embedMsg(
-                        "Segundo round, guerreiros!",
-                        "Lutadores",
-                        roundTwonames,
-                        "Vencedor",
-                        roundTwoFighterTwo.fighter_name
-                            .charAt(0)
-                            .toUpperCase() +
-                            roundTwoFighterTwo.fighter_name.slice(1)
-                    );
-
-                    roundTwoWinner.push(
-                        roundTwoFighterTwo.fighter_name
-                            .charAt(0)
-                            .toUpperCase() +
-                            roundTwoFighterTwo.fighter_name.slice(1)
-                    );
-                    return msg;
-                }
-                console.log(
-                    `${consolePrefix} ${roundTwoWinner.shift()} ganhou o round dois`
-                );
-            }, 4000); */
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// RED AREA
-        }, 1000);
+        }, 2000);
     }
 });
