@@ -37,7 +37,6 @@ bot.on("ready", () => {
 bot.on("message", (message) => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
-    const EntireMessage = message.content;
     const argsAsArray = message.content.slice(prefix.length).trim().split(" ");
     const command = argsAsArray.shift().toLowerCase();
     let colors = [
