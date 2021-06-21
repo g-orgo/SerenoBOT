@@ -26,7 +26,6 @@
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
-    "jasmine": "^3.7.0",
     "jest": "^27.0.4"
   }
 }
