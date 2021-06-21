@@ -6,9 +6,9 @@ const axios = require("axios");
 
 // BOT AND USEFUL CONST/VARIABLES
 const bot = new discordAPI.Client();
-const prefix = credentials.prefix;
+const prefix = "!"
 /* const consolePrefix = `${credentials.consolePrefix} | ${setInterval(consoleTimer, 1000)}]: `; */
-const consolePrefix = credentials.consolePrefix;
+const consolePrefix = "[SERENO";
 const randomInRange = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min;
 };
