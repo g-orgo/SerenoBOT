@@ -161,8 +161,8 @@ bot.on("message", (message) => {
         let frstParticipantName = frstParticipant.username;
         let scndParticipantName = scndParticipant.username;
 
-        let fhgterObjArray = [];
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
+        let fhgterObjArray = [];
         function participantTeamArray(participant) {
             let frstFighter = participant.fighter1;
             let scndFighter = participant.fighter2;
