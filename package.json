@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "nodemon ./index.js ./server.js"
+    "server": "py ../os-lutadores-django/manage.py runserver",
+    "start": "nodemon ./index.js ./server.js && npm run server"
   },
   "repository": {
     "type": "git",

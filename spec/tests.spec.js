@@ -1,5 +1,5 @@
 function description(msg){
-    return `| ${msg}`
+    return `> ${msg}`
 }
 describe("Trivial logics", function () {
     test(description("Return a random value in range"), function () {
@@ -9,7 +9,7 @@ describe("Trivial logics", function () {
         );
     });
 
-    test(description("Winrate system"), function () {
+    test(description("Only two decimals"), function () {
         let ataq = 150;
         let bloq = 80;
         expect((ataq + bloq / 100).toFixed(2)).toBe("150.80");
