@@ -6,12 +6,12 @@ const axios = require("axios");
 
 // BOT AND USEFUL CONST/VARIABLES
 const bot = new discordAPI.Client();
-const prefix = "!"
+const prefix = "!";
 /* const consolePrefix = `${credentials.consolePrefix} | ${setInterval(consoleTimer, 1000)}]: `; */
 const consolePrefix = "[SERENO";
-const randomInRange = (min, max) => {
+function randomInRange(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
-};
+}
 
 var fightParticipants = [];
 
@@ -35,8 +35,8 @@ bot.on("ready", () => {
 
 // MESSAGE ENG
 bot.on("message", (message) => {
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// YELLOW AREA
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
     const argsAsArray = message.content.slice(prefix.length).trim().split(" ");
     const command = argsAsArray.shift().toLowerCase();
     let colors = [
