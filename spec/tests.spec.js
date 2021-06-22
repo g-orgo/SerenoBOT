@@ -1,11 +1,4 @@
-const discordAPI = require("discord.js");
 const datefns = require("date-fns");
-
-var bot = new discordAPI.Client();
-
-afterAll(() => {
-    bot.destroy();
-});
 
 function description(msg) {
     return `• ${msg}`;
@@ -43,5 +36,4 @@ describe("\n  ► Trivial logics", function () {
     });
 });
 
-describe("► Bot logics", function () {
-});
+describe("► Bot logics", function () {});
