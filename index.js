@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// INITIAL AREA
 const datefns = require("date-fns");
 const discordAPI = require("discord.js");
-const credentials = require("./credentials.json");
 const axios = require("axios");
+require("dotenv").config();
 
 // BOT AND USEFUL CONST/VARIABLES
 const bot = new discordAPI.Client();
@@ -16,7 +16,7 @@ function randomInRange(min, max) {
 var fightParticipants = [];
 
 // INIT
-bot.login(credentials.botToken)
+bot.login(process.env.BOT_TOKEN)
     .then()
     .catch((err) => {
         console.log(err);
